@@ -1,6 +1,10 @@
 package TetrisApp;
 import java.awt.event.*;
 
+/**
+ * @author Josh
+ *
+ */
 public class ControlListener implements KeyListener {
 
 	public void keyTyped(KeyEvent event) {
@@ -9,7 +13,22 @@ public class ControlListener implements KeyListener {
 	}
 
 	public void keyPressed(KeyEvent event) {
-		// TODO Auto-generated method stub
+		//right
+		if(event.getKeyCode() == 39) {
+			GamePanel.moveRight();
+		}
+		//left
+		if(event.getKeyCode() == 37) {
+			//GamePanel.moveLeft();
+		}
+		//up
+		if(event.getKeyCode() == 38) {
+			
+		} 
+		//down
+		if(event.getKeyCode() == 40) {
+			
+		}
 		
 	}
 
