@@ -1,4 +1,4 @@
-package TetrisApp;
+package app;
 import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
@@ -6,7 +6,6 @@ import javax.swing.JFrame;
 public class App {
 	//shows game state, score and next tetromino
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		JFrame frame = new JFrame();
 		frame.setLayout(new BorderLayout());
 		frame.add(new ScorePanel(), BorderLayout.WEST);

@@ -1,4 +1,4 @@
-package TetrisApp;
+package app;
 
 import java.util.Random;
 

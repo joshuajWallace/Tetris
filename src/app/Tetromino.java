@@ -1,6 +1,4 @@
-package TetrisApp;
-
-import java.awt.Color;
+package app;
 
 public class Tetromino {
 	//true false array showing position occupied
@@ -8,7 +6,7 @@ public class Tetromino {
 	public Tetromino(boolean[][] outline) {
 		shape = outline;
 	}	
-	/*[y][x] ---> [x][length-y] when rotated to the left,  rotation matrix.
+	/**[y][x] ---> [x][length-y] when rotated to the left,  rotation matrix.
 	 * [y][x] ---> [length-x][y] for right.
 	 * right rotation =
 	 * {cos(θ), -sin(θ)
@@ -24,7 +22,7 @@ public class Tetromino {
 		boolean[][] newShape = new boolean[shape.length][shape.length];
 		for(int x =0; x<shape.length;x++) {
 			for(int y =0; y<shape.length;y++) {
-				newShape[x][shape.length - (y+1)] = shape[y][x];
+				newShape[y][shape.length - (x+1)] = shape[x][y];
 			}
 		}
 		shape = newShape;
