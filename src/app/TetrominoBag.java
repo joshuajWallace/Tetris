@@ -3,23 +3,23 @@ package app;
 import java.util.Random;
 
 public class TetrominoBag {
-	private final static boolean[][] J = {{true,false,false},{true,true, true},{false, false, false}};
-	private final static boolean[][] L = {{false,false,true},{true,true, true},{false, false, false}};
-	private final static boolean[][] Z = {{true,true,false},{false,true, true},{false, false, false}};
-	private final static boolean[][] S = {{false,true,true},{true,true, false},{false, false, false}};
-	private final static boolean[][] O = {{true,true},{true,true}};
-	private final static boolean[][] I = {{false,false,false,false}, {true,true,true,true},{false,false,false,false}, {false,false,false,false}};
-	private final static boolean[][] T = {{false,true,false},{true,true, true},{false, false, false}};
+	private final boolean[][] J = {{true,false,false},{true,true, true},{false, false, false}};
+	private final boolean[][] L = {{false,false,true},{true,true, true},{false, false, false}};
+	private final boolean[][] Z = {{true,true,false},{false,true, true},{false, false, false}};
+	private final  boolean[][] S = {{false,true,true},{true,true, false},{false, false, false}};
+	private final boolean[][] O = {{true,true},{true,true}};
+	private final boolean[][] I = {{false,false,false,false}, {true,true,true,true},{false,false,false,false}, {false,false,false,false}};
+	private final boolean[][] T = {{false,true,false},{true,true, true},{false, false, false}};
 	private int current;
 	
-	private Tetromino JTetromino = new Tetromino(J);
-	private Tetromino LTetromino = new Tetromino(L);
-	private Tetromino ZTetromino = new Tetromino(Z);
-	private Tetromino STetromino = new Tetromino(S);
-	private Tetromino OTetromino = new Tetromino(O);
-	private Tetromino ITetromino = new Tetromino(I);
-	private Tetromino TTetromino = new Tetromino(T);
-	private Tetromino[] bag = {JTetromino, LTetromino, ZTetromino, STetromino, OTetromino, ITetromino, TTetromino};
+	private Tetromino jTetromino = new Tetromino(J);
+	private Tetromino lTetromino = new Tetromino(L);
+	private Tetromino zTetromino = new Tetromino(Z);
+	private Tetromino sTetromino = new Tetromino(S);
+	private Tetromino oTetromino = new Tetromino(O);
+	private Tetromino iTetromino = new Tetromino(I);
+	private Tetromino tTetromino = new Tetromino(T);
+	private Tetromino[] bag = {jTetromino, lTetromino, zTetromino, sTetromino, oTetromino, iTetromino, tTetromino};
 	
 	public  TetrominoBag() {
 		randomise();

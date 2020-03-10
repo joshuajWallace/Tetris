@@ -13,16 +13,16 @@ import javax.swing.border.BevelBorder;
 
 public class GamePanel extends JPanel{
 	
-	private final long serialVersionUID = -761825656979462027L;
-	private boolean canvas[][] = new boolean[16][26];
-	private int yPosition = 2;
-	private int xPosition = 3;
+	private static final long serialVersionUID = 1L;
+	private boolean canvas[][] = new boolean[18][26];
 	private TetrominoBag bag = new TetrominoBag();
 	private Tetromino currentPiece;
-	private final int MAX_X = 12;
-	private final int MAX_Y = 23;
-	private final int MIN_X = 1;
-	private final int MIN_Y = 1;
+	private final int MAX_X = 13;
+	private final int MAX_Y = 24;
+	private final int MIN_X = 4;
+	private final int MIN_Y = 0;
+	private int yPosition = MIN_Y;
+	private int xPosition = MIN_X;
 	
 	private  Timer speed = new Timer(500 , new RepaintListener());
 
@@ -32,19 +32,26 @@ public class GamePanel extends JPanel{
 		setBackground(Color.black);
 		setBorder(BorderFactory.createLineBorder(Color.blue));
 		addKeyListener(new ControlListener());
-		
 		setFocusable(true);
 		newGame();
 	}
+	
+	
 	public void newGame() {
-		for(int i =0; i < MAX_X; i++)
+		for(int i =0; i <= MAX_X; i++)
 			Arrays.fill(canvas[i], false);
+		for(int i =0; i <= MAX_X; i++)
+			canvas[i][MAX_Y] = true;
+		Arrays.fill(canvas[MIN_X - 1] , true);
+		Arrays.fill(canvas[MAX_X + 1], true);
 		bag.randomise();
 		currentPiece = bag.getCurrent();
 		insertPiece();
 		repaint();
 		speed.start();
 	}
+	
+	
 	public void insertPiece() {
 		for(int x = 0 ; x < currentPiece.length(); x++){
 			for(int y = 0; y < currentPiece.length(); y++) {
@@ -53,7 +60,38 @@ public class GamePanel extends JPanel{
 			}
 		}
 	}
-	public void nextPiece() {	
+	
+	
+	public void deletePiece() {
+		for(int x = 0 ; x < currentPiece.length(); x++){
+			for(int y = 0; y < currentPiece.length(); y++) {
+				if(currentPiece.value(x, y) && canvas[xPosition + x][yPosition + y])
+					canvas[xPosition + x][yPosition + y] = false;				
+			}
+		}
+	}
+	
+	
+	public void rotate(){
+		Tetromino temp = new Tetromino(currentPiece.getShape());
+		temp.rotate();
+		deletePiece();
+		for(int x = 0 ; x < temp.length() ; x++){
+			for(int y =  0; y < temp.length() ; y++) {
+				if( canvas[xPosition + x][yPosition + y] && temp.value(x, y)){				
+					insertPiece();
+					return;
+				}
+			}
+		}
+		currentPiece.rotate();
+		insertPiece();
+		repaint();
+	}
+	
+	
+	public void nextPiece() {
+		checkRows();
 		currentPiece = bag.getNext();
 		yPosition = MIN_Y;
 		xPosition = MIN_X;
@@ -66,113 +104,88 @@ public class GamePanel extends JPanel{
 		insertPiece();
 		repaint();		
 	}
+	
+	
 	public void moveFall() {
-		if(yPosition + currentPiece.length() -1 == MAX_Y ) {
-			nextPiece();
-		}
-		for(int x = 0 ; x < currentPiece.length(); x++){
-			for(int y = 0; y < currentPiece.length(); y++) {
-				if(y == 0) {
-					if(currentPiece.value(x, currentPiece.length() - 1) && canvas[xPosition + x][yPosition +currentPiece.length()]) {
-						nextPiece();	
-					}
-				}
-				else
-					if(!currentPiece.value(x, currentPiece.length() - y) && currentPiece.value(x, currentPiece.length() - (1+y)) && canvas[xPosition + x][yPosition +currentPiece.length() - y]){
-						nextPiece();
-				}
-			
-			}
-		}
-		for(int x = 0 ; x < currentPiece.length(); x++){
-			for(int y = 0; y < currentPiece.length(); y++) {
-				if(currentPiece.value(x, y) && canvas[xPosition + x][yPosition + y])
-					canvas[xPosition + x][yPosition + y] = false;				
+		deletePiece();
+		for(int x = 0 ; x < currentPiece.length() ; x++){
+			for(int y =  0; y < currentPiece.length() ; y++) {
+				if(canvas[xPosition + x][yPosition + currentPiece.length() - y]  && currentPiece.value(x, currentPiece.length() -1 - y)) {
+					insertPiece();
+					nextPiece();
+					return;
+				}	
 			}
 		}
 		yPosition++;
 		insertPiece();
 	}
-	public void moveRight() {
-		if(xPosition + currentPiece.length() > MAX_X ){
-			return;
-		}
-		//needs to deal with out of bounds, catch somehow
-		for(int x = 0 ; x < (MAX_X - xPosition) && x < currentPiece.length() ; x++){
-			for(int y = 0; y < currentPiece.length(); y++) {
-				/*if(x==0)
-					if(currentPiece.value(currentPiece.length() - (x+ 1), y) && canvas[xPosition + currentPiece.length() - x][yPosition + y] )
-						return;
-				if(currentPiece.value(currentPiece.length() - (x+ 1), y) && canvas[xPosition + currentPiece.length() - x][yPosition + y] && !currentPiece.value(currentPiece.length() - x, y)) {
+	
+	
+	public void moveRight() {		deletePiece();
+		deletePiece();
+		for(int x = 0 ; x < currentPiece.length() ; x++){
+			for(int y =  0; y < currentPiece.length() ; y++) {
+				if(canvas[xPosition + currentPiece.length() - x][yPosition +  y]  && currentPiece.value(currentPiece.length() -1 - x, y)) {
+					insertPiece();
 					return;
-				}*/
-				if( canvas[xPosition + currentPiece.length() - x][yPosition + y] && canvas[xPosition + currentPiece.length() - x + 1][yPosition + y])
-					return;
-			}
-		}
-
-		for(int x = 0 ; x < currentPiece.length(); x++){
-			for(int y = 0; y < currentPiece.length(); y++) {
-				if(xPosition + x <= MAX_X && currentPiece.value(x, y))
-					canvas[xPosition + x][yPosition + y] = false;				
+				}	
 			}
 		}
 		xPosition++;
-		for(int x = 0 ; x < currentPiece.length(); x++){
-			for(int y = 0; y < currentPiece.length(); y++) {
-				if(currentPiece.value(x, y))
-					canvas[xPosition + x][yPosition + y] = currentPiece.value(x, y);
-			}
-		}
-		
+		insertPiece();		
 	}
-	public boolean checkRow() {
-		for(int i =0; i <= MAX_X; i++) {
-			for(int a = 0; a <= MAX_Y; a++) {
-				if()
-			}
-		
-	}
+	
+	
 	public void moveLeft() {
-		if(xPosition <= MIN_X ) {
-			return;
-		}
-		for(int x = 0 ; x < xPosition && x <  currentPiece.length() ; x++){
-			for(int y = 0; y < currentPiece.length(); y++) {
-				if(x == 0 && currentPiece.value(x, y) && canvas[xPosition + x - 1][yPosition + y]) {
-					return;	
-				}
-				else if(x > 0)
-						if(!currentPiece.value(x, y) && currentPiece.value(x - 1, y) && canvas[xPosition - x][yPosition + y]){
-							return;
-				}			
-			}
-		}
-
-		for(int x = 0 ; x < currentPiece.length(); x++){
-			for(int y = 0; y < currentPiece.length(); y++) {
-				if(xPosition + x <= MAX_X)
-					canvas[xPosition + x][yPosition + y] = false;				
+		deletePiece();
+		for(int x = 0 ; x < currentPiece.length() ; x++){
+			for(int y =  0; y < currentPiece.length() ; y++) {
+				if(canvas[xPosition + x - 1][yPosition +  y]  && currentPiece.value(x, y)) {
+					insertPiece();
+					return;
+				}	
 			}
 		}
 		xPosition--;
-		for(int x = 0 ; x < currentPiece.length(); x++){
-			for(int y = 0; y < currentPiece.length(); y++) {
-				if(currentPiece.value(x, y))
-					canvas[xPosition + x][yPosition + y] = currentPiece.value(x, y);
+		insertPiece();
+	}
+	
+	
+	public void checkRows() {
+		int numberCleared = 0;
+		for(int y = MIN_Y; y < MAX_Y; y++) {
+			boolean full = true;
+			for(int x = MIN_X; x <= MAX_X; x++) {
+				if(!canvas[x][y]) 
+					full = false;
+				}
+			if(full) {
+				clearRows(y);
+				numberCleared++;
 			}
 		}
+		ScorePanel.rowsCleared(numberCleared);
+			
+	}
+	public void clearRows(int row) {
+		for(int x= MIN_X; x <= MAX_X;x++) {
+			for(int y= row; y > MIN_Y;y--)
+				canvas[x][y] = canvas[x][y-1];
+		}
+		repaint();
+	}
 
 		
-	}
+
 	@Override
 	public void paintComponent(Graphics g) {
 		
 		super.paintComponent(g);
-		for(int x =0; x <= MAX_X; x++) {
-			for(int y = 0; y <= MAX_Y; y++) {
+		for(int x = MIN_X; x <= MAX_X; x++) {
+			for(int y = MIN_Y; y <= MAX_Y; y++) {
 				if(canvas[x][y]) {
-					int xDraw = (x*30 - 30);
+					int xDraw = (x*30 - 120);
 					int yDraw = (y*30);
 					g.setColor(Color.green);
 					g.fillRect(xDraw, yDraw, 30, 30);
@@ -183,6 +196,8 @@ public class GamePanel extends JPanel{
 		}
 
 	}
+	
+	
 	private class RepaintListener implements ActionListener {
 
 		@Override
@@ -191,6 +206,8 @@ public class GamePanel extends JPanel{
 			repaint();
 		}	
 	}
+	
+	
 	private class ControlListener implements KeyListener {
 
 		public void keyTyped(KeyEvent event) {
@@ -211,7 +228,7 @@ public class GamePanel extends JPanel{
 			}
 			//up
 			if(event.getKeyCode() == KeyEvent.VK_UP) {
-				
+				rotate();
 			} 
 			//down
 			if(event.getKeyCode() == KeyEvent.VK_DOWN) {

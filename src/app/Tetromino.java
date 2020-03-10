@@ -22,7 +22,7 @@ public class Tetromino {
 		boolean[][] newShape = new boolean[shape.length][shape.length];
 		for(int x =0; x<shape.length;x++) {
 			for(int y =0; y<shape.length;y++) {
-				newShape[y][shape.length - (x+1)] = shape[x][y];
+				newShape[y][shape.length - 1 - x] = shape[x][y];
 			}
 		}
 		shape = newShape;

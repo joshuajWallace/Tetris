@@ -1,13 +1,11 @@
 package app;
 
 import java.awt.*;
-import javax.swing.*;
-import java.awt.event.*;
+import java.util.Arrays;
 
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 public class ScorePanel extends JPanel {
 
@@ -18,7 +16,6 @@ public class ScorePanel extends JPanel {
 	
 	private static int score = 0;
 	private static JLabel informationGameState = new JLabel("0");
-	private Image next;
 	private Font defaultFont = new Font("TimesRoman", Font.BOLD, 30);
 	public ScorePanel() {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -32,7 +29,7 @@ public class ScorePanel extends JPanel {
 		setPreferredSize(new Dimension(200,20));
 
 	}
-	public void rowsCleared(int numberOfRows) {
+	public static void rowsCleared(int numberOfRows) {
 		switch(numberOfRows) {
 		case 1:
 			updateScore(40);
