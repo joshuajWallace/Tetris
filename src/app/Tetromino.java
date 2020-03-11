@@ -1,8 +1,11 @@
 package app;
 
+import java.awt.Color;
+
 public class Tetromino {
 	//true false array showing position occupied
 	private boolean[][] shape;
+	private Color blockColor = Color.green;
 	public Tetromino(boolean[][] outline) {
 		shape = outline;
 	}	
@@ -35,6 +38,12 @@ public class Tetromino {
 	}
 	public boolean value(int x, int y) {
 		return shape[x][y];
+	}
+	public void setColor(Color newColor) {
+		blockColor = newColor;
+	}
+	public Color getColor() {
+		return blockColor;				
 	}
 	
 }

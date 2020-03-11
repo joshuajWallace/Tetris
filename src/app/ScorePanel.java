@@ -1,7 +1,11 @@
 package app;
 
 import java.awt.*;
-import java.util.Arrays;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -13,19 +17,27 @@ public class ScorePanel extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 7730153057695726313L;
-	
+	private static JLabel highScore = new JLabel("0");
 	private static int score = 0;
-	private static JLabel informationGameState = new JLabel("0");
+	private static JLabel currentScore = new JLabel("0");
 	private Font defaultFont = new Font("TimesRoman", Font.BOLD, 30);
+	static String file = "G:\\Project\\java\\Tetris\\src\\files\\highScore.txt";
 	public ScorePanel() {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		final JLabel SCORE = new JLabel("Score:");
 		SCORE.setFont(defaultFont);
 		add(SCORE);
 		updateScore(score);
-		informationGameState.setFont(defaultFont);
-		informationGameState.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-		add(informationGameState);
+		currentScore.setFont(defaultFont);
+		currentScore.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		add(currentScore);
+		final JLabel HIGH_SCORE = new JLabel("High Score:");
+		HIGH_SCORE.setFont(defaultFont);
+		add(HIGH_SCORE);
+		highScore.setFont(defaultFont);
+		highScore.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		getHighScore();
+		add(highScore);
 		setPreferredSize(new Dimension(200,20));
 
 	}
@@ -48,7 +60,38 @@ public class ScorePanel extends JPanel {
 	}
 	public static void updateScore(int add) {
 		score += add;
-		informationGameState.setText(Integer.toString(score));;
+		currentScore.setText(Integer.toString(score));
+	}
+	public static void resetScore() {
+		int test = Integer.parseInt(highScore.getText());
+		if(test < score) {
+			highScore.setText(Integer.toString(score));
+			setHighScore();
+		}
+		score = 0;
+		currentScore.setText(Integer.toString(score));
+	}
+	public void getHighScore() {
+		BufferedReader rd;
+		try {
+			rd = new BufferedReader(new FileReader(new File(file)));
+			highScore.setText(rd.readLine());
+			rd.close();			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public static void setHighScore() {
+		BufferedWriter bw;
+		try {
+			bw = new BufferedWriter(new FileWriter(new File(file)));
+			bw.write(highScore.getText());
+			bw.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

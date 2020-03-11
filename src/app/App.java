@@ -7,10 +7,10 @@ public class App {
 	public static void main(String[] args) {
 		JFrame frame = new JFrame();
 		frame.setLayout(new BorderLayout());
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(new ScorePanel(), BorderLayout.WEST);
 		frame.add(new GamePanel(), BorderLayout.CENTER);
 		frame.pack();
-
 		frame.setVisible(true);
 		frame.setResizable(false);
 	}

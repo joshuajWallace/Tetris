@@ -1,5 +1,6 @@
 package app;
 
+import java.awt.Color;
 import java.util.Random;
 
 public class TetrominoBag {
@@ -22,6 +23,13 @@ public class TetrominoBag {
 	private Tetromino[] bag = {jTetromino, lTetromino, zTetromino, sTetromino, oTetromino, iTetromino, tTetromino};
 	
 	public  TetrominoBag() {
+		iTetromino.setColor(Color.cyan);
+		oTetromino.setColor(Color.yellow);
+		tTetromino.setColor(Color.pink);
+		sTetromino.setColor(Color.green);
+		zTetromino.setColor(Color.red);
+		jTetromino.setColor(Color.blue);
+		lTetromino.setColor(Color.orange);
 		randomise();
 	}
 	public Tetromino getCurrent() {
