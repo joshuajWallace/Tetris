@@ -6,13 +6,13 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.security.CodeSource;
 
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class ScorePanel extends JPanel {
-
 	/**
 	 * 
 	 */
@@ -21,7 +21,6 @@ public class ScorePanel extends JPanel {
 	private static int score = 0;
 	private static JLabel currentScore = new JLabel("0");
 	private Font defaultFont = new Font("TimesRoman", Font.BOLD, 30);
-	static String file = "G:\\Project\\java\\Tetris\\src\\files\\highScore.txt";
 	public ScorePanel() {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		final JLabel SCORE = new JLabel("Score:");
@@ -74,7 +73,10 @@ public class ScorePanel extends JPanel {
 	public void getHighScore() {
 		BufferedReader rd;
 		try {
-			rd = new BufferedReader(new FileReader(new File(file)));
+			CodeSource codeSource = App.class.getProtectionDomain().getCodeSource();
+			File jarFile = new File(codeSource.getLocation().toURI().getPath());
+			String file = jarFile.getParentFile().getPath();
+			rd = new BufferedReader(new FileReader(new File(file + "\\highScore.txt")));
 			highScore.setText(rd.readLine());
 			rd.close();			
 			
@@ -85,7 +87,10 @@ public class ScorePanel extends JPanel {
 	public static void setHighScore() {
 		BufferedWriter bw;
 		try {
-			bw = new BufferedWriter(new FileWriter(new File(file)));
+			CodeSource codeSource = App.class.getProtectionDomain().getCodeSource();
+			File jarFile = new File(codeSource.getLocation().toURI().getPath());
+			String file = jarFile.getParentFile().getPath();
+			bw = new BufferedWriter(new FileWriter(new File(file + "\\highScore.txt")));
 			bw.write(highScore.getText());
 			bw.close();
 			
